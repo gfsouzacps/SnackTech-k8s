@@ -3,7 +3,7 @@ name: Terraform
 on:
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   terraform:
@@ -29,7 +29,9 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform workspace select dev || terraform workspace new dev &&
+        terraform plan -var-file="./environments/dev/terraform.tfvars" -out="dev.plan"
+
 
     - name: Run Tests
       run: |
